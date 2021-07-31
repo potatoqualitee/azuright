@@ -1,0 +1,21 @@
+on: [push]
+
+jobs:
+  test-everywhere:
+    name: Test Action on all platforms
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run the action
+        uses: potatoqualitee/azuright@initial
+        with:
+          install: azurite
+
+      - name: Test
+        run: echo "test"
