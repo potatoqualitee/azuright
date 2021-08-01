@@ -15,8 +15,8 @@ jobs:
       - name: Run the action
         uses: potatoqualitee/azuright@initial
         with:
-          silent: false
           self-signed-cert: true
 
       - name: Test
-        run: echo "test"
+        run: |
+          dotnet add package Azure.Storage.Blobs
