@@ -113,9 +113,4 @@ Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBek
 
 $connstring = "DefaultEndpointsProtocol=$proto;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=$($proto)://127.0.0.1:$BlobPort/devstoreaccount1;QueueEndpoint=$($proto)://127.0.0.1:$QueuePort/devstoreaccount1;"
 
-Write-Verbose "CONNECTING"
-$env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-$null = Import-Module Az.Storage
-$blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-$null = $blob.CreateIfNotExists()
 Write-Output $connstring
