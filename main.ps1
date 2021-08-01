@@ -60,7 +60,9 @@ if ($SelfSignedCert) {
       $CertPath = Join-Path -Path $dir -ChildPath cert.pem
       $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
       $cmd = "openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass"
-      $null = $PSCmdlet.Invoke($cmd)
+
+      $ps = [PowerShell]::Create()
+      $null = $ps.Invoke($cmd)
 
       # register with Linux
       if ($isLinux) {
