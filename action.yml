@@ -50,8 +50,6 @@ runs:
     - id: psoutput
       shell: pwsh
       run: |
-        Write-Output "Getting variables for suite"
-
         $params = @{
             Directory       = "${{ inputs.directory }}"
             BlobPort        = "${{ inputs.blob-port }}"
