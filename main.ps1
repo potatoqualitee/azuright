@@ -36,8 +36,8 @@ Write-Verbose "Installing azurite"
 if ($isLinux -or $isMacOS) {
    $null = npm install -g azurite
 } else {
-   $null = git clone https://github.com/Azure/Azurite.git ~/Azurite
-   $null = Set-Location ~/Azurite
+   $null = git clone https://github.com/Azure/Azurite.git "$home\Azurite"
+   $null = Set-Location "$home\Azurite"
    $null = npm install | Write-Verbose
    $null = pkg -t node16-win --output blob -c package.json dist/src/blob/main.js | Write-Verbose
    $null = pkg -t node16-win --output queue -c package.json dist/src/queue/main.js | Write-Verbose
