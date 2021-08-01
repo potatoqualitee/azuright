@@ -38,6 +38,6 @@ jobs:
           Write-Verbose "CONNECTING"
           $connstring = "${{ steps.azuright.outputs.connstring }}"
           $env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-          Import-Module Az.Storage -Verbose
+          Import-Module Az.Storage
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
           $blob.CreateIfNotExists()
