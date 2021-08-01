@@ -1,3 +1,4 @@
+[CmdletBinding()]
 param (
    [string]$Directory,
    [int]$BlobPort,
@@ -31,10 +32,10 @@ if (-not $Directory) {
 $dir = Join-Path -Path $Directory -ChildPath azurite
 $debuglog = Join-Path -Path $dir -ChildPath debug.log
 
-Write-Output "Installing azurite"
-npm install -g azurite
+Write-Verbose "Installing azurite"
+$null = npm install -g azurite
 
-Write-Output "Starting azurite"
+Write-Verbose "Starting azurite"
 $null = New-Item -Type Directory -Force -Path $dir
 
 $params = @("--location", $dir, "--debug", $debuglog, "--blobPort", $BlobPort, "--queuePort", $QueuePort, "--tablePort", $TablePort)
@@ -52,7 +53,7 @@ if ($OAuth) {
 }
 
 if ($SelfSignedCert) {
-   Write-Output "Creating self-signed certificate"
+   Write-Verbose "Creating self-signed certificate"
    $CertPath = Join-Path -Path $dir -ChildPath cert.pem
    $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
 
@@ -93,18 +94,15 @@ if ($CertPass) {
    $params += "--pwd", $CertPass
 }
 
-Start-Process -FilePath azurite -ArgumentList $params
+$null = Start-Process -FilePath azurite -ArgumentList $params
 
-Write-Output "
+Write-Verbose "
 Params: $params
 
 Default account name: 
 devstoreaccount1
 
 Default account key:
-Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
 
-Connection string: 
-DefaultEndpointsProtocol=$proto;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=$($proto)://127.0.0.1:$BlobPort/devstoreaccount1;QueueEndpoint=$($proto)://127.0.0.1:$QueuePort/devstoreaccount1;
-
-"
+Write-Output = "DefaultEndpointsProtocol=$proto;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=$($proto)://127.0.0.1:$BlobPort/devstoreaccount1;QueueEndpoint=$($proto)://127.0.0.1:$QueuePort/devstoreaccount1;"

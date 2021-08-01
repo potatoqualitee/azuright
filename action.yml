@@ -66,4 +66,9 @@ runs:
             CertPass        = "${{ inputs.cert-password }}"
         }
 
-        ./main.ps1 @params
+        $connstring = ${{ github.action_path }}/main.ps1 @params
+        Write-Output "::set-output name=connstring::$connstring"
+outputs:
+  connstring:
+    description: "Connection string"
+    value: ${{ steps.psoutput.outputs.connstring }}
