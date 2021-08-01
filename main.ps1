@@ -58,26 +58,18 @@ if ($SelfSignedCert) {
    if (-not $CertPass) {
       $CertPass = "AzurIte365.Invoke"
    }
-   
+
    if ($isLinux -or $isMacOs) {
-      # Create self signed cert on linux using openssl
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
 
-      # register with Linux
-      if ($isLinux) {
-         sudo cp $CertPath /etc/ssl/certs/ca.crt
-         sudo chmod 644 /etc/ssl/certs/ca.crt
-         sudo update-ca-certificates
-      }
+      sudo cp $CertPath /etc/ssl/certs/ca.crt
+      sudo chmod 644 /etc/ssl/certs/ca.crt
+      sudo update-ca-certificates
    } else {
-      # create a self signed cert on Windows
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
       $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
-
-      # register self signed cert on Windows
-      # $cert | Register-SelfSignedCertificate -CertStoreLocation "Cert:\CurrentUser\My"
    }
 }
 if ($CertPath) {
@@ -98,7 +90,7 @@ if ($CertPass) {
 Start-Process -FilePath azurite -ArgumentList $params
 
 Write-Output "
-$(if (-not $CertPass) {
+$(if (-not $CertPass1) {
    "Params: $params"
 })
 
