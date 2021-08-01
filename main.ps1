@@ -17,7 +17,7 @@ if ($OAuth -and -not $CertPath -and -not $SelfSignedCert) {
 }
 
 if ($CertPath -and -not $CertKeyPath -and -not $CertPass) {
-   throw "CertKeyPath or CertPasswor are required when using CertPath"
+   throw "CertKeyPath or CertPass are required when using CertPath"
 }
 
 if (-not $Directory) {
@@ -66,7 +66,9 @@ if ($CertPass) {
 Start-Process -FilePath azurite -ArgumentList $params
 
 Write-Output "
-Params: $params
+$(if (-not $CertPass) {
+   "Params: $params"
+})
 
 Default account name: 
 devstoreaccount1
