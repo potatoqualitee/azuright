@@ -110,7 +110,7 @@ if ($CertPass) {
 if ($isLinux -or $isMacOS) {
    $null = Start-Process -FilePath node -ArgumentList $params -Verbose
 } else {
-   $null = Start-Process -FilePath node -ArgumentList $params -Verbose -NoNewWindow
+   $null = Start-Job -FilePath "C:\Program Files\nodejs\node.exe" -ArgumentList $params -Verbose
 }
 
 Write-Verbose "
