@@ -51,6 +51,35 @@ if ($OAuth) {
    $params += "--oauth"
 }
 
+if ($SelfSignedCert) {
+   if (-not $CertPass) {
+      $CertPass = "AzurIte365.Invoke"
+   }
+   if ($isLinux -or $isMacOs) {
+      # Create self signed cert on linux using openssl
+      $CertPath = Join-Path -Path $dir -ChildPath cert.pem
+      $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
+      $cmd = "openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass"
+      $null = $PSCmdlet.Invoke($cmd)
+
+      # register with Linux
+      if ($isLinux) {
+         sudo cp $CertPath /etc/ssl/certs/ca.crt
+         sudo chmod 644 /etc/ssl/certs/ca.crt
+         sudo update-ca-certificates
+      }
+   } else {
+      # create a self signed cert on Windows
+      $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
+
+      # Export Self signed cert to PFX with password Hello123!
+      $securepass = (New-Object PSCredential -ArgumentList "nada", $CertPass).Password
+      $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
+
+      # register self signed cert on Windows
+      # $cert | Register-SelfSignedCertificate -CertStoreLocation "Cert:\CurrentUser\My"
+   }
+}
 if ($CertPath) {
    $proto = "https"
    $params += "--cert", $CertPath

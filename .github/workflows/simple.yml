@@ -16,6 +16,7 @@ jobs:
         uses: potatoqualitee/azuright@initial
         with:
           silent: false
+          self-signed-cert: true
 
       - name: Test
         run: echo "test"
