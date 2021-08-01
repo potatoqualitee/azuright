@@ -52,6 +52,7 @@ if ($OAuth) {
 }
 
 if ($SelfSignedCert) {
+   Write-Output "Creating self-signed certificate"
    $CertPath = Join-Path -Path $dir -ChildPath cert.pem
    $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
 
@@ -63,11 +64,11 @@ if ($SelfSignedCert) {
       $null = openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
 
       if ($isLinux) {
-         sudo cp $CertPath /etc/ssl/certs/ca.crt
-         sudo chmod 644 /etc/ssl/certs/ca.crt
-         sudo update-ca-certificates
+         $null = sudo cp $CertPath /etc/ssl/certs/ca.crt
+         $null = sudo chmod 644 /etc/ssl/certs/ca.crt
+         $null = sudo update-ca-certificates
       } else {
-         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath
+         $null = sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath
       }
    } else {
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
@@ -76,6 +77,7 @@ if ($SelfSignedCert) {
       $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
    }
 }
+
 if ($CertPath) {
    $proto = "https"
    $params += "--cert", $CertPath
