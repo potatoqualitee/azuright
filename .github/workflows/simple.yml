@@ -35,10 +35,6 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
-          Start-Sleep 5
-          if ($isLinux) {
-            openssl s_client  -connect https://localhost:10000 | Write-Verbose
-          }
           Import-Module Az.Storage
           $connstring = "${{ steps.azuright.outputs.connstring }}"
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
