@@ -110,7 +110,7 @@ if ($CertPass) {
 if ($isLinux -or $isMacOS) {
    $null = Start-Process -FilePath azurite -ArgumentList $params -NoNewWindow -Verbose
 } else {
-   $null = Start-Job -FilePath azurite -ArgumentList $params -Verbose
+   $null = Start-Job -FilePath C:\npm\prefix\azurite.ps1 -ArgumentList $params -Verbose
 }
 
 Write-Verbose "
