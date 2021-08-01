@@ -33,20 +33,7 @@ $dir = Join-Path -Path $Directory -ChildPath azurite
 $debuglog = Join-Path -Path $dir -ChildPath debug.log
 
 Write-Verbose "Installing azurite"
-if ($isLinux -or $isMacOS) {
-   $null = npm install -g azurite
-} else {
-   <#
-   $null = npm install -g pkg | Write-Verbose
-   $null = git clone https://github.com/Azure/Azurite.git "$home\Azurite"
-   $null = Set-Location "$home\Azurite"
-   $null = npm install | Write-Verbose
-   $null = pkg -t node16-win --output blob -c package.json dist\src\blob\main.js | Write-Verbose
-   $null = pkg -t node16-win --output queue -c package.json dist\src\queue\main.js | Write-Verbose
-   $null = Get-ChildItem -Recurse -Exclude node_modules | Write-Verbose
-   #>
-   $null = npm install -g azurite
-}
+$null = npm install -g azurite
 
 Write-Verbose "Starting azurite"
 $null = New-Item -Type Directory -Force -Path $dir
@@ -108,10 +95,18 @@ if ($CertPass) {
 }
 
 if ($isLinux -or $isMacOS) {
-   $null = Start-Process -FilePath node -ArgumentList $params -Verbose
+   $null = Start-Process -FilePath azurite -ArgumentList $params -Verbose
 } else {
-   $null = Start-Process -FilePath "C:\Program Files\nodejs\node.exe" -ArgumentList $params -Verbose -NoNewWindow
+   $scriptblock = {
+      azurite
+   }
+   
+   $runspace = [PowerShell]::Create()
+   $null = $runspace.AddScript($scriptblock)
+   $null = $runspace.AddArgument($params)
+   $runspace.BeginInvoke()
 }
+
 
 Write-Verbose "
 Params: $params
