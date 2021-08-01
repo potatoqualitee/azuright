@@ -53,17 +53,17 @@ runs:
         Write-Output "Getting variables for suite"
 
         $params = @{
-            Directory       = ${{ inputs.directory }}
-            BlobPort        = ${{ inputs.blob-port }}
-            QueuePort       = ${{ inputs.queue-port }}
-            TablePort       = ${{ inputs.table-port }}
+            Directory       = "${{ inputs.directory }}"
+            BlobPort        = "${{ inputs.blob-port }}"
+            QueuePort       = "${{ inputs.queue-port }}"
+            TablePort       = "${{ inputs.table-port }}"
             Silent          = $${{ inputs.silent }}
             Loose           = $${{ inputs.loose }}
             OAuth           = $${{ inputs.oauth }}
             SelfSignedCert  = $${{ inputs.self-signed-cert }}
-            CertPath        = ${{ inputs.cert-path }}
-            CertKeyPath     = ${{ inputs.cert-key-path }}
-            CertPassword    = $${{ inputs.cert-password }}
+            CertPath        = "${{ inputs.cert-path }}"
+            CertKeyPath     = "${{ inputs.cert-key-path }}"
+            CertPassword    = "${{ inputs.cert-password }}"
         }
 
         ./main.ps1 @params
