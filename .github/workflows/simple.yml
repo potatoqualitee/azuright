@@ -35,9 +35,8 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
-          # Avoid AzureRM and Azure conficts by removing system dirs from $env:PSModulePath
+          Write-Verbose "CONNECTING"
           $env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-          Import-Module Az.Storage
-          $connstring = "${{ steps.azuright.outputs.connstring }}"
+          $null = Import-Module Az.Storage
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-          $blob.CreateIfNotExists()
+          $null = $blob.CreateIfNotExists()
