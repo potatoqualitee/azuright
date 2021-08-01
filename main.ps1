@@ -51,7 +51,7 @@ if ($isLinux -or $isMacOS) {
 Write-Verbose "Starting azurite"
 $null = New-Item -Type Directory -Force -Path $dir
 
-$params = @("azurite", "--location", $dir, "--debug", $debuglog, "--blobPort", $BlobPort, "--queuePort", $QueuePort, "--tablePort", $TablePort)
+$params = @("--location", $dir, "--debug", $debuglog, "--blobPort", $BlobPort, "--queuePort", $QueuePort, "--tablePort", $TablePort)
 
 if ($Silent) {
    $params += "--silent"
