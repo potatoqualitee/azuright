@@ -33,7 +33,7 @@ $dir = Join-Path -Path $Directory -ChildPath azurite
 $debuglog = Join-Path -Path $dir -ChildPath debug.log
 
 Write-Verbose "Installing azurite"
-$null = npm install -g azurite
+#$null = npm install -g azurite
 
 Write-Verbose "Starting azurite"
 $null = New-Item -Type Directory -Force -Path $dir
@@ -95,9 +95,11 @@ if ($CertPass) {
 }
 
 if ($isLinux -or $isMacOS) {
+   $null = npm install -g azurite
    $null = Start-Process -FilePath azurite -ArgumentList $params -Verbose
 } else {
    $scriptblock = {
+      npm install -g azurite
       azurite --location C:\Users\runneradmin\AppData\Local\Temp\azurite --debug C:\Users\runneradmin\AppData\Local\Temp\azurite\debug.log --blobPort 10000 --queuePort 10001 --tablePort 10002
    }
    
