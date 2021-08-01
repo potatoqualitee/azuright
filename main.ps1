@@ -65,11 +65,11 @@ if ($SelfSignedCert) {
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
 
       if ($isLinux) {
-         $null = sudo cp $CertPath /etc/ssl/certs/ca.crt
-         $null = sudo chmod 644 /etc/ssl/certs/ca.crt
-         $null = sudo update-ca-certificates
+         sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
+         sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
+         sudo update-ca-certificates | Write-Verbose
       } else {
-         $null = sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath
+         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
