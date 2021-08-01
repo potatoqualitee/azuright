@@ -74,8 +74,7 @@ if ($SelfSignedCert) {
       # create a self signed cert on Windows
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
-      # Export Self signed cert to PFX with password Hello123!
-      $securepass = (New-Object PSCredential -ArgumentList "nada", $CertPass).Password
+      $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
       $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
 
       # register self signed cert on Windows
