@@ -39,6 +39,6 @@ jobs:
           $env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
           Import-Module Az.Storage
           #$blob = New-Object Azure.Storage.Blobs.BlobContainerClient("DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;", "sample-container")
-          $connstring = ${{ steps.azuright.outputs.connstring }}
+          $connstring = "${{ steps.azuright.outputs.connstring }}"
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
           $blob.CreateIfNotExists()
