@@ -59,12 +59,12 @@ if ($SelfSignedCert) {
       $CertPass = "AzurIte365.Invoke"
    }
 
+   $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
+   $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
+
+   openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
+   
    if ($isLinux -or $isMacOs) {
-      $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
-      $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
-
-      openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
-
       Write-Verbose "Trusting certificate"
       if ($isLinux) {
          sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
@@ -74,20 +74,12 @@ if ($SelfSignedCert) {
          sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
-      $CertPath = Join-Path -Path $Directory -ChildPath cert.pfx
-      
-      $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
-
-      $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
-      $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
-
       # trust self signed cert
       Write-Verbose "Trusting certificate"
       $store = New-Object System.Security.Cryptography.X509Certificates.X509Store "TrustedPublisher","LocalMachine"
       $null = $store.Open("ReadWrite")
-      $null = $store.Add($cert)
+      #$null = $store.Add($cert)
       $null = $store.Close()
-
    }
 }
 
