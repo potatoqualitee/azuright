@@ -69,6 +69,7 @@ if ($CertPassword) {
 Start-Process -FilePath azurite -ArgumentList $params
 
 Write-Output "
+Params: $params
 
 Default account name: 
 devstoreaccount1
