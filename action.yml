@@ -63,7 +63,7 @@ runs:
             SelfSignedCert  = $${{ inputs.self-signed-cert }}
             CertPath        = ${{ inputs.cert-path }}
             CertKeyPath     = ${{ inputs.cert-key-path }}
-            CertPassword    = ${{ inputs.cert-password }}
+            CertPassword    = $${{ inputs.cert-password }}
         }
 
         ./main.ps1 @params
