@@ -60,16 +60,20 @@ if ($SelfSignedCert) {
    }
 
    if ($isLinux -or $isMacOs) {
-      openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
+      $null = openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
 
-      sudo cp $CertPath /etc/ssl/certs/ca.crt
-      sudo chmod 644 /etc/ssl/certs/ca.crt
-      sudo update-ca-certificates
+      if ($isLinux) {
+         sudo cp $CertPath /etc/ssl/certs/ca.crt
+         sudo chmod 644 /etc/ssl/certs/ca.crt
+         sudo update-ca-certificates
+      } else {
+         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath
+      }
    } else {
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
-      $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
+      $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
    }
 }
 if ($CertPath) {
@@ -90,9 +94,7 @@ if ($CertPass) {
 Start-Process -FilePath azurite -ArgumentList $params
 
 Write-Output "
-$(if (-not $CertPass1) {
-   "Params: $params"
-})
+Params: $params
 
 Default account name: 
 devstoreaccount1
