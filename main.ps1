@@ -9,30 +9,27 @@ param (
    [switch]$SelfSignedCert,
    [string]$CertPath,
    [string]$CertKeyPath,
-   [string]$CertPassword
+   [string]$CertPass
 )
 
 if ($OAuth -and -not $CertPath -and -not $SelfSignedCert) {
    throw "CertPath or SelfSignedCert are required when using OAuth"
 }
 
-if ($CertPath -and -not $CertKeyPath -and -not $CertPassword) {
+if ($CertPath -and -not $CertKeyPath -and -not $CertPass) {
    throw "CertKeyPath or CertPasswor are required when using CertPath"
 }
 
 if (-not $Directory) {
    $Directory = [System.IO.Path]::GetTempPath()
+} else {
+   if (-not (Test-Path -Path $Directory)) {
+      $null = New-Item -ItemType Directory -Path $Directory -Force
+   }
 }
 
-if ($ismacos -or $islinux) {
-   $dir = "$Directory/azurite"
-   $debuglog = "$dir/debug.log"
-}
-
-if ($iswindows) {
-   $dir = "$Directory\azurite"
-   $debuglog = "$dir\debug.log"
-}
+$dir = Join-Path -Path $Directory -ChildPath azurite
+$debuglog = Join -Path $dir -ChildPath debug.log
 
 Write-Output "Installing azurite"
 npm install -g azurite
@@ -62,8 +59,8 @@ if ($CertKeyPath) {
    $params += "--key", $CertKeyPath
 }
 
-if ($CertPassword) {
-   $params += "--pwd", $CertPassword
+if ($CertPass) {
+   $params += "--pwd", $CertPass
 }
 
 Start-Process -FilePath azurite -ArgumentList $params
