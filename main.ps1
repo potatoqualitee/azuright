@@ -54,8 +54,8 @@ if ($OAuth) {
 
 if ($SelfSignedCert) {
    Write-Verbose "Creating self-signed certificate"
-   $CertPath = Join-Path -Path $dir -ChildPath cert.pem
-   $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
+   $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
+   $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
 
    if (-not $CertPass) {
       $CertPass = "AzurIte365.Invoke"
