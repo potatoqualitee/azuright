@@ -15,6 +15,6 @@ if ($ismacos -or $islinux) {
 
 if ($iswindows) {
    $dir = "$Directory\azurite"
-   $null = New-Item -Type Directory -Force -Path 
+   $null = New-Item -Type Directory -Force -Path $dir
    azurite --silent --location $dir --debug "$dir\debug.log"
 }
