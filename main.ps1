@@ -1,18 +1,23 @@
 param (
    [string]$Directory = [System.IO.Path]::GetTempPath(),
-   [int]$BlobPort = "10000",
-   [int]$QueuePort = "10001",
-   [int]$TablePort = "10002",
+   [int]$BlobPort,
+   [int]$QueuePort,
+   [int]$TablePort,
    [switch]$Silent,
    [switch]$Loose,
    [switch]$OAuth,
    [switch]$SelfSignedCert,
    [string]$CertPath,
-   [string]$CertKeyPath
+   [string]$CertKeyPath,
+   [string]$CertPassword
 )
 
-if ($OAuth -and -not $CertPath -and -not $CertKeyPath -and -not $SelfSignedCert) {
-   throw "CertPath and CertKeyPath or SelfSignedCert are required when using OAuth"
+if ($OAuth -and -not $CertPath -and -not $SelfSignedCert) {
+   throw "CertPath or SelfSignedCert are required when using OAuth"
+}
+
+if ($CertPath -and -not $CertKeyPath -and -not $CertPassword) {
+   throw "CertKeyPath or CertPasswor are required when using CertPath"
 }
 
 if ($ismacos -or $islinux) {
@@ -51,6 +56,10 @@ if ($CertPath) {
 
 if ($CertKeyPath) {
    $params += "--key", $CertKeyPath
+}
+
+if ($CertPassword) {
+   $params += "--pwd", $CertPassword
 }
 
 Start-Process -FilePath azurite -ArgumentList $params
