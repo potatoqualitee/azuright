@@ -52,17 +52,16 @@ if ($OAuth) {
 }
 
 if ($SelfSignedCert) {
+   $CertPath = Join-Path -Path $dir -ChildPath cert.pem
+   $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
+
    if (-not $CertPass) {
       $CertPass = "AzurIte365.Invoke"
    }
+   
    if ($isLinux -or $isMacOs) {
       # Create self signed cert on linux using openssl
-      $CertPath = Join-Path -Path $dir -ChildPath cert.pem
-      $CertKeyPath = Join-Path -Path $dir -ChildPath key.pem
-      $cmd = "openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass"
-
-      $ps = [PowerShell]::Create()
-      $null = $ps.Invoke($cmd)
+      openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
 
       # register with Linux
       if ($isLinux) {
