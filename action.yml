@@ -64,6 +64,7 @@ runs:
             CertPath        = "${{ inputs.cert-path }}"
             CertKeyPath     = "${{ inputs.cert-key-path }}"
             CertPass        = "${{ inputs.cert-password }}"
+            Verbose         = $true
         }
 
         $connstring = ${{ github.action_path }}/main.ps1 @params

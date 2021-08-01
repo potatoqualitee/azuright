@@ -94,7 +94,7 @@ if ($CertPass) {
    $params += "--pwd", $CertPass
 }
 
-$null = Start-Process -FilePath azurite -ArgumentList $params
+$null = Start-Process -FilePath azurite -ArgumentList $params -NoNewWindow -Verbose
 
 Write-Verbose "
 Params: $params
