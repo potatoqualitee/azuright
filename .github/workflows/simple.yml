@@ -35,5 +35,5 @@ jobs:
         shell: pwsh
         run: |
           Import-Module Az.Storage
-          $blob = New-Object BlobContainerClient("UseDevelopmentStorage=true", "sample-container")
+          $blob = New-Object Azure.Storage.Blobs.BlobContainerClient("UseDevelopmentStorage=true", "sample-container")
           $blob.CreateIfNotExists()
