@@ -1,5 +1,4 @@
 on: [push]
-
 jobs:
   test-everywhere:
     name: Test Action on all platforms
@@ -18,5 +17,6 @@ jobs:
           self-signed-cert: true
 
       - name: Test
+        shell: pwsh
         run: |
           Import-Module Az.Storage
