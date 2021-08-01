@@ -36,7 +36,8 @@ jobs:
         shell: pwsh
         run: |
           Write-Verbose "CONNECTING"
+          $connstring = "${{ steps.azuright.outputs.connstring }}"
           $env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-          $null = Import-Module Az.Storage -Verbose
+          Import-Module Az.Storage -Verbose
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-          $null = $blob.CreateIfNotExists()
+          $blob.CreateIfNotExists()
