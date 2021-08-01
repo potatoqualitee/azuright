@@ -14,8 +14,6 @@ jobs:
 
       - name: Run the action
         uses: potatoqualitee/azuright@initial
-        with:
-          install: azurite
 
       - name: Test
         run: echo "test"
