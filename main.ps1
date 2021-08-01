@@ -107,21 +107,15 @@ Default account name:
 devstoreaccount1
 
 Default account key:
-Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw=="
+Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
 
-
-# Avoid AzureRM and Azure conficts by removing system dirs from $env:PSModulePath
-$env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-Import-Module Az.Storage
-$connstring = "${{ steps.azuright.outputs.connstring }}"
-$blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-$blob.CreateIfNotExists()
+"
 
 $connstring = "DefaultEndpointsProtocol=$proto;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=$($proto)://127.0.0.1:$BlobPort/devstoreaccount1;QueueEndpoint=$($proto)://127.0.0.1:$QueuePort/devstoreaccount1;"
 
 Write-Verbose "CONNECTING"
 $env:PSModulePath = ($env:PSModulePath.Split(";") | Select-Object -First 1)
-Import-Module Az.Storage
+$null = Import-Module Az.Storage
 $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
 $null = $blob.CreateIfNotExists()
 Write-Output $connstring
