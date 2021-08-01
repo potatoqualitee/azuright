@@ -98,15 +98,14 @@ if ($isLinux -or $isMacOS) {
    $null = Start-Process -FilePath azurite -ArgumentList $params -Verbose
 } else {
    $scriptblock = {
-      azurite
+      azurite --location C:\Users\runneradmin\AppData\Local\Temp\azurite --debug C:\Users\runneradmin\AppData\Local\Temp\azurite\debug.log --blobPort 10000 --queuePort 10001 --tablePort 10002
    }
    
    $runspace = [PowerShell]::Create()
    $null = $runspace.AddScript($scriptblock)
    $null = $runspace.AddArgument($params)
-   $runspace.BeginInvoke()
+   $null = $runspace.BeginInvoke()
 }
-
 
 Write-Verbose "
 Params: $params
