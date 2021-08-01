@@ -64,6 +64,7 @@ if ($SelfSignedCert) {
    if ($isLinux -or $isMacOs) {
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
 
+      Write-Verbose "Trusting certificate"
       if ($isLinux) {
          sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
