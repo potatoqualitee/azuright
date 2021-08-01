@@ -82,8 +82,8 @@ if ($SelfSignedCert) {
       $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
 
       # trust self signed cert
-      $certstore = "Cert:\CurrentUser\TrustedPublisher"
-      $store = Get-ChildItem -Path $certstore | Select-Object -First 1
+      Write-Verbose "Trusting certificate"
+      $store = New-Object System.Security.Cryptography.X509Certificates.X509Store "TrustedPublisher","LocalMachine"
       $null = $store.Open("ReadWrite")
       $null = $store.Add($cert)
       $null = $store.Close()
