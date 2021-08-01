@@ -29,11 +29,11 @@ jobs:
       - name: Run the action
         uses: potatoqualitee/azuright@initial
         with:
-          self-signed-cert: true
+          self-signed-cert: false
 
       - name: Test
         shell: pwsh
         run: |
           Import-Module Az.Storage
-          $blob = New-Object Azure.Storage.Blobs.BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=https://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=https://127.0.0.1:10001/devstoreaccount1;", "sample-container")
+          $blob = New-Object Azure.Storage.Blobs.BlobContainerClient("DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;", "sample-container")
           $blob.CreateIfNotExists()
