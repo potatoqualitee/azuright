@@ -62,7 +62,7 @@ if ($SelfSignedCert) {
    }
 
    if ($isLinux -or $isMacOs) {
-      $null = openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass
+      openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
 
       if ($isLinux) {
          $null = sudo cp $CertPath /etc/ssl/certs/ca.crt
