@@ -29,7 +29,7 @@ if (-not $Directory) {
 }
 
 $dir = Join-Path -Path $Directory -ChildPath azurite
-$debuglog = Join -Path $dir -ChildPath debug.log
+$debuglog = Join-Path -Path $dir -ChildPath debug.log
 
 Write-Output "Installing azurite"
 npm install -g azurite
