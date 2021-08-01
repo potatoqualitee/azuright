@@ -30,7 +30,7 @@ jobs:
         id: azuright
         uses: potatoqualitee/azuright@initial
         with:
-          self-signed-cert: false
+          self-signed-cert: true
 
       - name: Test
         shell: pwsh
