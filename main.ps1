@@ -54,14 +54,15 @@ if ($OAuth) {
 
 if ($SelfSignedCert) {
    Write-Verbose "Creating self-signed certificate"
-   $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
-   $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
 
    if (-not $CertPass) {
       $CertPass = "AzurIte365.Invoke"
    }
 
    if ($isLinux -or $isMacOs) {
+      $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
+      $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
+
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
 
       Write-Verbose "Trusting certificate"
@@ -73,10 +74,20 @@ if ($SelfSignedCert) {
          sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
+      $CertPath = Join-Path -Path $Directory -ChildPath cert.pfx
+      
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
       $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
+
+      # trust self signed cert
+      $certstore = "Cert:\CurrentUser\TrustedPublisher"
+      $store = Get-ChildItem -Path $certstore | Select-Object -First 1
+      $null = $store.Open("ReadWrite")
+      $null = $store.Add($cert)
+      $null = $store.Close()
+
    }
 }
 
