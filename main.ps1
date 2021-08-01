@@ -1,5 +1,5 @@
 param (
-   [string]$Directory = [System.IO.Path]::GetTempPath(),
+   [string]$Directory,
    [int]$BlobPort,
    [int]$QueuePort,
    [int]$TablePort,
@@ -18,6 +18,10 @@ if ($OAuth -and -not $CertPath -and -not $SelfSignedCert) {
 
 if ($CertPath -and -not $CertKeyPath -and -not $CertPassword) {
    throw "CertKeyPath or CertPasswor are required when using CertPath"
+}
+
+if (-not $Directory) {
+   $Directory = [System.IO.Path]::GetTempPath()
 }
 
 if ($ismacos -or $islinux) {
