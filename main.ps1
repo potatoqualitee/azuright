@@ -3,18 +3,21 @@ param (
    [switch]$ShowLog
 )
 
-Write-Output "Installing azurite"
-npm install -g azurite
-
-Write-Output "Starting azurite"
 if ($ismacos -or $islinux) {
    $dir = "$Directory/azurite"
-   $null = New-Item -Type Directory -Force -Path $dir
-   azurite --silent --location $dir --debug "$dir/debug.log"
+   $debuglog = "$dir/debug.log"
 }
 
 if ($iswindows) {
    $dir = "$Directory\azurite"
-   $null = New-Item -Type Directory -Force -Path $dir
-   azurite --silent --location $dir --debug "$dir\debug.log"
+   $debuglog = "$dir\debug.log"
 }
+
+Write-Output "Installing azurite"
+npm install -g azurite
+
+Write-Output "Starting azurite"
+$null = New-Item -Type Directory -Force -Path $dir
+
+Start-Process -FilePath azurite -ArgumentList @("--silent", "--location", $dir, "--debug", $debuglog)
+#azurite --silent --location $dir --debug $debuglog
