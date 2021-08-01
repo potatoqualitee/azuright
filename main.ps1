@@ -30,9 +30,6 @@ if (-not $Directory) {
 }
 
 $dir = Join-Path -Path $Directory -ChildPath azurite
-if (-not (Test-Path -Path $dir)) {
-   $null = New-Item -ItemType Directory -Path $dir -Force
-}
 $debuglog = Join-Path -Path $dir -ChildPath debug.log
 
 Write-Verbose "Installing azurite"
@@ -113,7 +110,7 @@ if ($CertPass) {
 if ($isLinux -or $isMacOS) {
    $null = Start-Process -FilePath azurite -ArgumentList $params -NoNewWindow -Verbose
 } else {
-   azurite --silent --location $directory
+   & azurite --silent --location $directory
 }
 
 Write-Verbose "
