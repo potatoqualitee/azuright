@@ -51,7 +51,7 @@ if ($isLinux -or $isMacOS) {
 Write-Verbose "Starting azurite"
 $null = New-Item -Type Directory -Force -Path $dir
 
-$params = @("--location", $dir, "--debug", $debuglog, "--blobPort", $BlobPort, "--queuePort", $QueuePort, "--tablePort", $TablePort)
+$params = @("azurite", "--location", $dir, "--debug", $debuglog, "--blobPort", $BlobPort, "--queuePort", $QueuePort, "--tablePort", $TablePort)
 
 if ($Silent) {
    $params += "--silent"
@@ -108,9 +108,9 @@ if ($CertPass) {
 }
 
 if ($isLinux -or $isMacOS) {
-   $null = Start-Process -FilePath azurite -ArgumentList $params -Verbose
+   $null = Start-Process -FilePath node -ArgumentList $params -Verbose
 } else {
-   $null = Start-Process -FilePath azurite -ArgumentList $params -Verbose -NoNewWindow
+   $null = Start-Process -FilePath node -ArgumentList $params -Verbose -NoNewWindow
 }
 
 Write-Verbose "
