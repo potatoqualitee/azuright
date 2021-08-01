@@ -107,6 +107,7 @@ if ($isLinux -or $isMacOS) {
    $null = $runspace.AddScript($scriptblock)
    $null = $runspace.AddArgument($params)
    $null = $runspace.BeginInvoke()
+   Start-Sleep 30
 }
 
 Write-Verbose "
