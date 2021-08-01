@@ -38,5 +38,10 @@ if ($OAuth) {
 
 Start-Process -FilePath azurite -ArgumentList $params
 
-Write-Output "`nDefault account name: devstoreaccount1"
-Write-Output "Default account key:`n Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==`n"
+Write-Output "
+
+Default account name: devstoreaccount1
+Default account key:
+Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+
+"
