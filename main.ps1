@@ -90,7 +90,7 @@ if ($SelfSignedCert) {
 
       # trust self signed cert
       Write-Verbose "Trusting certificate"
-      $store = New-Object System.Security.Cryptography.X509Certificates.X509Store "TrustedPublisher","LocalMachine"
+      $store = New-Object System.Security.Cryptography.X509Certificates.X509Store "Root","LocalMachine"
       $null = $store.Open("ReadWrite")
       $null = $store.Add($cert)
       $null = $store.Close()
