@@ -72,6 +72,7 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
+         security import $CertKeyPath -k ~/Library/Keychains/login.keychain | Write-Verbose
          security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
       }
    } else {
