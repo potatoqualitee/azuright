@@ -55,14 +55,15 @@ if ($OAuth) {
 if ($SelfSignedCert) {
    Write-Verbose "Creating self-signed certificate"
 
+   $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
+   $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
+   $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
+
    if (-not $CertPass) {
       $CertPass = "AzurIte365.Invoke"
    }
 
    if ($isLinux -or $isMacOs) {
-      $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
-      $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
-
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
       $CertPass = $null
 
@@ -72,19 +73,9 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         sudo security import $CertKeyPath -k ~/Library/Keychains/login.keychain | Write-Verbose
-         sudo security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
-         sudo security import $CertKeyPath -k /Library/Keychains/System.keychain | Write-Verbose
-         sudo security import $CertPath -k /Library/Keychains/System.keychain | Write-Verbose
-
-         sudo rm /usr/local/etc/openssl | Write-Verbose
-         sudo ln -s $CertPath /usr/local/etc/openssl | Write-Verbose
+         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
-   } else {
-      $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
-      $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
-      $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
-      
+   } else {      
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
