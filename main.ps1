@@ -75,12 +75,18 @@ if ($SelfSignedCert) {
          sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
-      $CertPath = Join-Path -Path $Directory -ChildPath cert.pfx
+      $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
+      $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
+      $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
       
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
-      $null = $cert | Export-PfxCertificate -FilePath $CertPath -Password $securepass
+      $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
+
+      openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
+      openssl pkcs12 -in $PfxPath -nocerts -out $CertKeyPath -nodes -passin pass:$CertPass | Write-Verbose
+      #openssl rsa -in serverkey.pem -out serverkey.key
 
       # trust self signed cert
       Write-Verbose "Trusting certificate"
