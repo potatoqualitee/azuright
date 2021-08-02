@@ -30,6 +30,7 @@ inputs:
   oauth:
     description: "Optional OAuth level."
     required: false
+    default: "false"
   self-signed-cert:
     description: "Create and trust a self-signed cert for `localhost` to easily enable HTTPS."
     required: false
