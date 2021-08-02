@@ -72,8 +72,7 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         security import $CertPath -k ~/Library/Keychains/login.keychain
-         #sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+         security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
