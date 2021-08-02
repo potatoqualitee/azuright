@@ -72,7 +72,8 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+         openssl pkcs12 -export -out "$Directory/tempkey.p12" -in $CertPath -inkey $CertKeyPath -passin pass:$CertPass | Write-Verbose # -passout pass:root
+         sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain "$Directory/tempkey.p12" | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
@@ -86,7 +87,7 @@ if ($SelfSignedCert) {
 
       openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
       openssl pkcs12 -in $PfxPath -nocerts -out "$Directory\tempkey.pem" -nodes -passin pass:$CertPass | Write-Verbose
-      openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath
+      openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath | Write-Verbose
 
       # trust self signed cert
       Write-Verbose "Trusting certificate"
@@ -94,7 +95,6 @@ if ($SelfSignedCert) {
       $null = $store.Open("ReadWrite")
       $null = $store.Add($cert)
       $null = $store.Close()
-
    }
 }
 
