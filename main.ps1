@@ -85,8 +85,8 @@ if ($SelfSignedCert) {
       $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
 
       openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
-      openssl pkcs12 -in $PfxPath -nocerts -out $CertKeyPath -nodes -passin pass:$CertPass | Write-Verbose
-      #openssl rsa -in serverkey.pem -out serverkey.key
+      openssl pkcs12 -in $PfxPath -nocerts -out "$Directory\tempkey.pem" -nodes -passin pass:$CertPass | Write-Verbose
+      openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath
 
       # trust self signed cert
       Write-Verbose "Trusting certificate"
