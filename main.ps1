@@ -77,8 +77,8 @@ if ($SelfSignedCert) {
          sudo security import $CertKeyPath -k /Library/Keychains/System.keychain | Write-Verbose
          sudo security import $CertPath -k /Library/Keychains/System.keychain | Write-Verbose
 
-         sudo rm /usr/local/etc/openssl
-         sudo ln -s $CertPath /usr/local/etc/openssl
+         sudo rm /usr/local/etc/openssl | Write-Verbose
+         sudo ln -s $CertPath /usr/local/etc/openssl | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
