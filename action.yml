@@ -1,0 +1,72 @@
+name: "azuright"
+branding:
+  icon: "hard-drive"
+  color: "blue"
+description: "Installs azurite (Azure storage emulator) on Windows, macOS or Linux."
+inputs:
+  directory:
+    description: "The workspace location path. The default is the OS temp directory."
+    required: false
+  blob-port:
+    description: "The Blob service listening port. The default port is 10000."
+    required: false
+    default: 10000
+  queue-port:
+    description: "The Queue service listening port. The default port is 10001."
+    required: false
+    default: 10001
+  table-port:
+    description: "The Table service listening port, by default 10002."
+    required: true
+    default: 10002
+  silent:
+    description: "Silent mode disables the access log. The default value is false."
+    required: false
+    default: "false"
+  loose:
+    description: "Enables loose mode, which ignores unsupported headers and parameters."
+    required: false
+    default: "false"
+  oauth:
+    description: "Optional OAuth level."
+    required: false
+  self-signed-cert:
+    description: "Create and trust a self-signed cert for `localhost` to easily enable HTTPS."
+    required: false
+    default: "false"
+  cert-path:
+    description: "Path to a locally trusted PEM or PFX certificate file path to enable HTTPS mode."
+    required: false
+  cert-password:
+    description: "Password for PFX file. Required when cert-path points to a PFX file."
+    required: false
+  cert-key-path:
+    description: "Path to a locally trusted PEM key file, required when cert-path points to a PEM file."
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - id: psoutput
+      shell: pwsh
+      run: |
+        $params = @{
+            Directory       = "${{ inputs.directory }}"
+            BlobPort        = "${{ inputs.blob-port }}"
+            QueuePort       = "${{ inputs.queue-port }}"
+            TablePort       = "${{ inputs.table-port }}"
+            Silent          = $${{ inputs.silent }}
+            Loose           = $${{ inputs.loose }}
+            OAuth           = $${{ inputs.oauth }}
+            SelfSignedCert  = $${{ inputs.self-signed-cert }}
+            CertPath        = "${{ inputs.cert-path }}"
+            CertKeyPath     = "${{ inputs.cert-key-path }}"
+            CertPass        = "${{ inputs.cert-password }}"
+            Verbose         = $true
+        }
+
+        $connstring = ${{ github.action_path }}/main.ps1 @params
+        Write-Output "::set-output name=connstring::$connstring"
+outputs:
+  connstring:
+    description: "Connection string"
+    value: ${{ steps.psoutput.outputs.connstring }}
