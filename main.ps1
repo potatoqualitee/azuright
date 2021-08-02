@@ -65,9 +65,11 @@ if ($SelfSignedCert) {
    if ($isLinux -or $isMacOs) {
       Write-Verbose "Installing mkcert"
       if ($isLinux) {
-         $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
-         $null = chmod +x mkcert-v1.4.3-linux-amd64
-         $null = sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+         openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
+         $CertPass = $null
+         sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
+         sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
+         sudo update-ca-certificates | Write-Verbose
       }
       if ($isMacOS) {
          $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64
