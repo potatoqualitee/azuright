@@ -35,6 +35,9 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
+          if ($isMacOs) {
+            curl https://127.0.0.1:10000
+          }
           Import-Module Az.Storage
           $connstring = "${{ steps.azuright.outputs.connstring }}"
           $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
