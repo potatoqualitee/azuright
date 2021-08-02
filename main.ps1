@@ -65,14 +65,14 @@ if ($SelfSignedCert) {
 
       openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
       $CertPass = $null
-      
+
       Write-Verbose "Trusting certificate"
       if ($isLinux) {
          sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+         sudo security add-trusted-cert -d -r trustAsRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
       $CertPath = Join-Path -Path $Directory -ChildPath cert.pfx
