@@ -64,14 +64,19 @@ if ($SelfSignedCert) {
    
    Write-Verbose "Installing mkcert"
    if ($isLinux) {
-      sudo apt-get install libnss3-tools -y | Write-Verbose
+      #sudo apt-get install libnss3-tools -y | Write-Verbose
+      wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64 | Write-Verbose
+      chmod +x mkcert-v1.4.3-linux-amd64 | Write-Verbose
+      sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert | Write-Verbose
    }
    if ($isMacOS) {
-      sudo brew install mkcert | Write-Verbose
-      sudo brew install nss | Write-Verbose
+      wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64 | Write-Verbose
+      chmod +x mkcert-v1.4.3-darwin-amd64 | Write-Verbose
+      sudo mv ./mkcert-v1.4.3-darwin-amd64 /usr/local/bin/mkcert | Write-Verbose
    }
    if ($isWindows) {
-      choco install mkcert -y | Write-Verbose
+      $ProgressPreference = "SilentlyContinue"
+      Invoke-WebRequest -Uri https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-windows-amd64.exe -OutFile C:\windows\system32\mkcert.exe
    }
    Write-Verbose "Running mkcert"
    mkcert -install | Write-Verbose
