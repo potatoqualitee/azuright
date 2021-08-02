@@ -62,25 +62,35 @@ if ($SelfSignedCert) {
       $CertPass = "AzurIte365.Invoke"
    }
    
-   Write-Verbose "Installing mkcert"
-   if ($isLinux) {
-      #sudo apt-get install libnss3-tools -y | Write-Verbose
-      wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64 | Write-Verbose
-      chmod +x mkcert-v1.4.3-linux-amd64 | Write-Verbose
-      sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert | Write-Verbose
+   if ($isLinux -or $isMacOs) {
+      Write-Verbose "Installing mkcert"
+      if ($isLinux) {
+         $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
+         $null = chmod +x mkcert-v1.4.3-linux-amd64
+         $null = sudo mv mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+      }
+      if ($isMacOS) {
+         $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64
+         $null = chmod +x mkcert-v1.4.3-darwin-amd64
+         $null = sudo mv ./mkcert-v1.4.3-darwin-amd64 /usr/local/bin/mkcert
+      }
+      Write-Verbose "Running mkcert"
+      mkcert -install | Write-Verbose
+      mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
+   } else {
+      $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
+
+      $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
+      $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
+
+      openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
+      openssl pkcs12 -in $PfxPath -nocerts -out "$Directory\tempkey.pem" -nodes -passin pass:$CertPass | Write-Verbose
+      openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath | Write-Verbose
+
+      # trust self signed cert
+      Write-Verbose "Trusting certificate"
+      certutil -addstore -f "ROOT" $CertPath | Write-Verbose
    }
-   if ($isMacOS) {
-      wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64 | Write-Verbose
-      chmod +x mkcert-v1.4.3-darwin-amd64 | Write-Verbose
-      sudo mv ./mkcert-v1.4.3-darwin-amd64 /usr/local/bin/mkcert | Write-Verbose
-   }
-   if ($isWindows) {
-      $ProgressPreference = "SilentlyContinue"
-      Invoke-WebRequest -Uri https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-windows-amd64.exe -OutFile C:\windows\system32\mkcert.exe
-   }
-   Write-Verbose "Running mkcert"
-   mkcert -install | Write-Verbose
-   mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
 }
 
 if ($CertPath) {
