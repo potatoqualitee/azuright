@@ -64,14 +64,14 @@ if ($SelfSignedCert) {
    
    Write-Verbose "Installing mkcert"
    if ($isLinux) {
-      sudo apt-get install libnss3-tools | Write-Verbose
+      sudo apt-get install libnss3-tools -y | Write-Verbose
    }
    if ($isMacOS) {
       sudo brew install mkcert | Write-Verbose
       sudo brew install nss | Write-Verbose
    }
    if ($isWindows) {
-      choco install mkcert | Write-Verbose
+      choco install mkcert -y | Write-Verbose
    }
    Write-Verbose "Running mkcert"
    mkcert -install | Write-Verbose
