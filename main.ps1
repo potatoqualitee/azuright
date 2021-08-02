@@ -73,7 +73,7 @@ if ($SelfSignedCert) {
          sudo update-ca-certificates | Write-Verbose
       } else {
          openssl pkcs12 -export -out "$Directory/tempkey.p12" -in $CertPath -inkey $CertKeyPath -passin pass:$CertPass -passout pass:$CertPass | Write-Verbose
-         sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain "$Directory/tempkey.p12" | Write-Verbose
+         sudo security -v add-trusted-cert -r trustRoot -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
