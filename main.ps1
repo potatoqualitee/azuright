@@ -74,12 +74,7 @@ if ($SelfSignedCert) {
       } else {
          sudo security import $CertKeyPath -k ~/Library/Keychains/login.keychain | Write-Verbose
          sudo security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
-         sudo security add-certificates $CertPath | Write-Verbose
-         try {
-            sudo security add-trusted-cert -d -k /Library/Keychains/System.keychain -r trustRoot $CertPath | Write-Verbose
-            sudo security add-trusted-cert -d -k /Library/Keychains/System.keychain -r trustAsRoot A$CertPath | Write-Verbose
-         } catch {}
-
+         sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" $CertPath | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
