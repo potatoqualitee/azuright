@@ -64,7 +64,7 @@ if ($SelfSignedCert) {
 
    if ($isLinux -or $isMacOs) {
       if ($isLinux) {
-         choco install mkcert -y | Write-Verbose
+         sudo apt-get install libnss3-tools
       } else {
          brew install mkcert | Write-Verbose
          brew install nss | Write-Verbose
