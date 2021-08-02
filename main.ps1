@@ -62,17 +62,7 @@ if ($SelfSignedCert) {
       $CertPass = "AzurIte365.Invoke"
    }
 
-   if ($isLinux -or $isMacOs) {
-      if ($isLinux) {
-         sudo apt-get install libnss3-tools
-      } else {
-         brew install mkcert | Write-Verbose
-         brew install nss | Write-Verbose
-      }
-   } else {      
-      choco install mkcert -y | Write-Verbose
-   }
-   
+   npm install -g mkcert | Write-Verbose
    mkcert -install | Write-Verbose
    mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
 }
