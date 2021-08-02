@@ -73,7 +73,9 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+         brew install mkcert | Write-Verbose
+         mkcert -install | Write-Verbose
+         mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
       }
    } else {      
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
