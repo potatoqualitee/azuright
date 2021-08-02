@@ -2,8 +2,6 @@
 
 This GitHub Action automatically installs azurite (Azure Storage Emulator) on Windows, macOS and Linux.
 
-https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite
-
 Azurite provides a free local environment for testing your Azure blob, queue storage, and table storage applications. When you're satisfied with how your application is working locally, you can then switch to using an Azure Storage account in the cloud. The emulator provides cross-platform support on Windows, Linux, and macOS.
 
 Azurite supersedes the Azure Storage Emulator. Azurite will continue to be updated to support the latest versions of Azure Storage APIs - [Microsoft docs](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite)
