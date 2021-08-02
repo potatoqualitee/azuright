@@ -26,7 +26,7 @@ jobs:
         if: steps.cacher.outputs.cache-hit != 'true'
         uses: potatoqualitee/psmodulecache@v3.5
 
-      - name: Run the action
+      - name: Install Azurite
         id: azuright
         uses: potatoqualitee/azuright@initial
         with:
