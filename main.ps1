@@ -65,16 +65,16 @@ if ($SelfSignedCert) {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
-      # trust self signed cert
-      Write-Verbose "Trusting certificate"
-      certutil -addstore -f "ROOT" $CertPath | Write-Verbose
-
       # azurite really didn't like the pfx, so we'll create and use a cert and key
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
       $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
       openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
       openssl pkcs12 -in $PfxPath -nocerts -out "$Directory\tempkey.pem" -nodes -passin pass:$CertPass | Write-Verbose
       openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath | Write-Verbose
+
+      # trust self signed cert
+      Write-Verbose "Trusting certificate"
+      certutil -addstore -f "ROOT" $CertPath | Write-Verbose
    }
 }
 
