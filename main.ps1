@@ -50,8 +50,8 @@ if ($SelfSignedCert) {
       sudo update-ca-certificates | Write-Verbose
    }
    if ($isMacOS) {
-      # It was super hard to register a self-signed certificate on a Mac, use mkcert to simplify
-      # they got it to work somehow
+      # It was super hard to register a self-signed certificate on a Mac
+      # so we'll use mkcert -- they got it to work somehow
       Write-Verbose "Installing mkcert"
       $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64
       $null = chmod +x mkcert-v1.4.3-darwin-amd64
@@ -65,7 +65,7 @@ if ($SelfSignedCert) {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
       $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
 
-      # azurite really didn't like the pfx, so we'll create and use a cert and key
+      # azurite didn't like the pfx and pass, so we'll create and use a cert and key
       $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
       $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
       openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
