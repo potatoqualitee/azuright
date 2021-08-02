@@ -64,31 +64,17 @@ if ($SelfSignedCert) {
 
    if ($isLinux -or $isMacOs) {
       if ($isLinux) {
-         openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
-         $CertPass = $null
-         sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
-         sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
-         sudo update-ca-certificates | Write-Verbose
+         sudo apt install libnss3-tools
       } else {
          brew install mkcert | Write-Verbose
          brew install nss | Write-Verbose
-         mkcert -install | Write-Verbose
-         mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
       }
    } else {      
-      $cert = New-SelfSignedCertificate -DnsName localhost -CertStoreLocation "Cert:\CurrentUser\My" -KeyLength 2048 -KeyExportPolicy Exportable
-
-      $securepass = ConvertTo-SecureString -String $CertPass -AsPlainText -Force
-      $null = $cert | Export-PfxCertificate -FilePath $PfxPath -Password $securepass
-
-      openssl pkcs12 -in $PfxPath -nokeys -out $CertPath -passin pass:$CertPass | Write-Verbose
-      openssl pkcs12 -in $PfxPath -nocerts -out "$Directory\tempkey.pem" -nodes -passin pass:$CertPass | Write-Verbose
-      openssl rsa -in "$Directory\tempkey.pem" -out $CertKeyPath | Write-Verbose
-
-      # trust self signed cert
-      Write-Verbose "Trusting certificate"
-      certutil -addstore -f "ROOT" $CertPath | Write-Verbose
+      choco install mkcert -y | Write-Verbose
    }
+   
+   mkcert -install | Write-Verbose
+   mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
 }
 
 if ($CertPath) {
