@@ -53,8 +53,7 @@ if ($OAuth) {
 }
 
 if ($SelfSignedCert) {
-   Write-Verbose "Creating self-signed certificate"
-
+   Write-Verbose "Creating and trusting self-signed certificate"
    $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
    $CertPath = Join-Path -Path $Directory -ChildPath cert.pem
    $CertKeyPath = Join-Path -Path $Directory -ChildPath key.pem
@@ -64,16 +63,15 @@ if ($SelfSignedCert) {
    }
 
    if ($isLinux -or $isMacOs) {
-      openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
-      $CertPass = $null
-
-      Write-Verbose "Trusting certificate"
       if ($isLinux) {
+         openssl req -new -newkey rsa:2048 -days 365 -nodes -x509 -subj '/CN=localhost' -keyout $CertKeyPath -out $CertPath -passout pass:$CertPass | Write-Verbose
+         $CertPass = $null
          sudo cp $CertPath /etc/ssl/certs/ca.crt | Write-Verbose
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
          brew install mkcert | Write-Verbose
+         brew install nss | Write-Verbose
          mkcert -install | Write-Verbose
          mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
       }
