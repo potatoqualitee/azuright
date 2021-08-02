@@ -72,8 +72,11 @@ if ($SelfSignedCert) {
          sudo chmod 644 /etc/ssl/certs/ca.crt | Write-Verbose
          sudo update-ca-certificates | Write-Verbose
       } else {
-         security import $CertKeyPath -k ~/Library/Keychains/login.keychain | Write-Verbose
-         security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
+         sudo security import $CertKeyPath -k ~/Library/Keychains/login.keychain | Write-Verbose
+         sudo security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
+         sudo security add-certificates $CertPath | Write-Verbose
+         sudo security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain $CertPath | Write-Verbose
+         sudo security -v add-trusted-cert -r trustAsRoot -e hostnameMismatch -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
