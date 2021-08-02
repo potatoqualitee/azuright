@@ -35,11 +35,7 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
-          if ($isMacOs) {
-            curl https://localhost:10000
-          } else {
-            Import-Module Az.Storage
-            $connstring = "${{ steps.azuright.outputs.connstring }}"
-            $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-            $blob.CreateIfNotExists()
-          }
+          Import-Module Az.Storage
+          $connstring = "${{ steps.azuright.outputs.connstring }}"
+          $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
+          $blob.CreateIfNotExists()
