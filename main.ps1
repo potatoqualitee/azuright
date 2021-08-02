@@ -76,7 +76,11 @@ if ($SelfSignedCert) {
          sudo security import $CertPath -k ~/Library/Keychains/login.keychain | Write-Verbose
          sudo security add-certificates $CertPath | Write-Verbose
          sudo security add-trusted-cert -d -r trustRoot -k ~/Library/Keychains/login.keychain $CertPath | Write-Verbose
-         sudo security -v add-trusted-cert -r trustAsRoot -e hostnameMismatch -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+         sudo security -v add-trusted-cert -r trustAsRoot -d -k /Library/Keychains/System.keychain $CertPath | Write-Verbose
+
+         sudo security add-trusted-cert -d -k /Library/Keychains/System.keychain -r trustRoot $CertPath | Write-Verbose
+         sudo security add-trusted-cert -d -k /Library/Keychains/System.keychain -r trustAsRoot A$CertPath | Write-Verbose
+
       }
    } else {
       $PfxPath = Join-Path -Path $Directory -ChildPath cert.pfx
