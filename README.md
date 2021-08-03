@@ -13,26 +13,10 @@ Just copy the code below to install and run Azure blob, queue storage, and table
 ```yaml
     - name: Install Azurite
       id: azuright
-      uses: potatoqualitee/azuright@initial
+      uses: potatoqualitee/azuright@v1
 ```
 
 By default, blob storage runs over port 10000, queue storage runs over port 10001 and table storage runs over port 10002.
-
-```yaml
-    - name: Install Azurite
-      id: azuright
-      uses: potatoqualitee/azuright@initial
-      with:
-        self-signed-cert: true
-
-    - name: Test
-      shell: pwsh
-      run: |
-        Import-Module Az.Storage
-        $connstring = "${{ steps.azuright.outputs.connstring }}"
-        $blob = New-Object Azure.Storage.Blobs.BlobContainerClient($connstring, "sample-container")
-        $blob.CreateIfNotExists()
-```
 
 ## Usage
 
@@ -48,7 +32,7 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 * `table-port` - The Table service listening port, by default 10002.
 * `silent` - Silent mode disables the access log. The default value is false.
 * `loose` - Enables loose mode, which ignores unsupported headers and parameters.
-* `oauth` - Optional OAuth level.
+* `oauth` - Azurite supports basic authentication using oauth which validates the incoming bearer token and checks the issuer, audience, and expiry. Azurite won't check the token signature or permissions.
 * `self-signed-cert` - Create and trust a self-signed cert for `localhost` to easily enable HTTPS.
 * `cert-path` - Path to a locally trusted PEM or PFX certificate file path to enable HTTPS mode.
 * `cert-password` - Password for PFX file. Required when cert-path points to a PFX file.
@@ -102,7 +86,7 @@ jobs:
 
       - name: Install Azurite
         id: azuright
-        uses: potatoqualitee/azuright@initial
+        uses: potatoqualitee/azuright@v1
         with:
           self-signed-cert: true
 

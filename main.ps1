@@ -93,7 +93,7 @@ if ($Loose) {
 }
 
 if ($OAuth) {
-   $params += "--oauth"
+   $params += "--oauth", "basic"
 }
 if ($CertPath) {
    $proto = "https"
