@@ -47,9 +47,10 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 Azurite accepts the same [well-known storage account and key](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#well-known-storage-account-and-key) and key used by the legacy Azure Storage Emulator.
 
 > Account name: devstoreaccount1
+
 > Account key: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
 
-If you'd like to use alternative crednetials, check out this article on [custom storage accounts and keys](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#custom-storage-accounts-and-keys).
+If you'd like to use alternative credentials, check out this article on [custom storage accounts and keys](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#custom-storage-accounts-and-keys).
 
 ### Example workflows
 
