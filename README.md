@@ -47,9 +47,10 @@ Create a workflow `.yml` file in your repositories `.github/workflows` directory
 Azurite accepts the same [well-known storage account and key](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#well-known-storage-account-and-key) and key used by the legacy Azure Storage Emulator.
 
 > Account name: devstoreaccount1
+
 > Account key: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
 
-If you'd like to use alternative crednetials, check out this article on [custom storage accounts and keys](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#custom-storage-accounts-and-keys).
+If you'd like to use alternative credentials, check out this article on [custom storage accounts and keys](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite#custom-storage-accounts-and-keys).
 
 ### Example workflows
 
@@ -69,20 +70,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create variables for module cacher
-        id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v3.5
+      - name: Install and cache PowerShell Modules
+        uses: potatoqualitee/psmodulecache@v4
         with:
           modules-to-cache: Az.Storage
-      - name: Run module cacher action
-        id: cacher
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.psmodulecache.outputs.modulepath }}
-          key: ${{ steps.psmodulecache.outputs.keygen }}
-      - name: Install PowerShell modules
-        if: steps.cacher.outputs.cache-hit != 'true'
-        uses: potatoqualitee/psmodulecache@v3.5
 
       - name: Install Azurite
         id: azuright
