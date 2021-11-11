@@ -70,20 +70,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create variables for module cacher
+      - name: Install and cache PowerShell Modules
         id: psmodulecache
-        uses: potatoqualitee/psmodulecache@v3.5
+        uses: potatoqualitee/psmodulecache@v4
         with:
           modules-to-cache: Az.Storage
-      - name: Run module cacher action
-        id: cacher
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.psmodulecache.outputs.modulepath }}
-          key: ${{ steps.psmodulecache.outputs.keygen }}
-      - name: Install PowerShell modules
-        if: steps.cacher.outputs.cache-hit != 'true'
-        uses: potatoqualitee/psmodulecache@v3.5
 
       - name: Install Azurite
         id: azuright
