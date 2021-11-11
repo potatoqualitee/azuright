@@ -71,7 +71,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install and cache PowerShell Modules
-        id: psmodulecache
         uses: potatoqualitee/psmodulecache@v4
         with:
           modules-to-cache: Az.Storage
