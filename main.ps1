@@ -57,11 +57,11 @@ if ($SelfSignedCert) {
       $null = chmod +x mkcert-v1.4.3-darwin-amd64
       $null = sudo mv ./mkcert-v1.4.3-darwin-amd64 /usr/local/bin/mkcert
 
-      if ($true) {
+      if ($PSVersionTable.OS -notmatch "Darwin 19") {
+         Write-Verbose "Trusting users to write to certificate root store"
          sudo security authorizationdb write com.apple.trust-settings.admin allow | Write-Verbose
       }
-      $PSVersionTable | Out-String | Write-Verbose
-
+      
       Write-Verbose "Running mkcert"
       mkcert -install | Write-Verbose
       mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose
