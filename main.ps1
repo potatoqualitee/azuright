@@ -57,6 +57,11 @@ if ($SelfSignedCert) {
       $null = chmod +x mkcert-v1.4.3-darwin-amd64
       $null = sudo mv ./mkcert-v1.4.3-darwin-amd64 /usr/local/bin/mkcert
 
+      if ($true) {
+         sudo security authorizationdb write com.apple.trust-settings.admin allow | Write-Verbose
+      }
+      $PSVersionTable | Write-Verbose
+
       Write-Verbose "Running mkcert"
       mkcert -install | Write-Verbose
       mkcert -key-file $CertKeyPath -cert-file $CertPath localhost | Write-Verbose

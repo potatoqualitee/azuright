@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Azurite
         id: azuright
-        uses: potatoqualitee/azuright@main
+        uses: potatoqualitee/azuright@newfixmac
         with:
           self-signed-cert: true
 
