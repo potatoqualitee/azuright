@@ -60,7 +60,7 @@ if ($SelfSignedCert) {
       if ($true) {
          sudo security authorizationdb write com.apple.trust-settings.admin allow | Write-Verbose
       }
-      $PSVersionTable | Write-Verbose
+      $PSVersionTable | Out-String | Write-Verbose
 
       Write-Verbose "Running mkcert"
       mkcert -install | Write-Verbose
