@@ -13,7 +13,7 @@ Just copy the code below to install and run Azure blob, queue storage, and table
 ```yaml
     - name: Install Azurite
       id: azuright
-      uses: potatoqualitee/azuright@v1
+      uses: potatoqualitee/azuright@v1.1
 ```
 
 By default, blob storage runs over port 10000, queue storage runs over port 10001 and table storage runs over port 10002.
@@ -77,7 +77,7 @@ jobs:
 
       - name: Install Azurite
         id: azuright
-        uses: potatoqualitee/azuright@v1
+        uses: potatoqualitee/azuright@v1.1
         with:
           self-signed-cert: true
 
@@ -97,6 +97,6 @@ Pull requests are welcome!
 The scripts and documentation in this project are released under the [MIT License](LICENSE)
 
 ## Notes
+In macOS Big Sur and above, this action runs `sudo security authorizationdb write com.apple.trust-settings.admin allow` which allows all users to write to the certificate root store. This  is done in order to bypass a new requirement for interactive approval to add certificates to the root store, which is great when you are sitting at your computer, but not when you're running commands non-interactively (like within a GitHub Runner).
 
-You can find more information about what's installed on GitHub runners on their [docs page](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-software).
-
+Also, if you're curiou about what's installed on GitHub runners, check out their [docs page](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-software).
