@@ -52,6 +52,7 @@ if ($SelfSignedCert) {
    if ($isMacOS) {
       # It was super hard to register a self-signed certificate on a Mac
       # so we'll use mkcert -- they got it to work somehow
+      # oh wait, now that doesn't work so we'll do something else for newer versions of mac
       Write-Verbose "Installing mkcert"
       $null = wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-darwin-amd64
       $null = chmod +x mkcert-v1.4.3-darwin-amd64
@@ -59,6 +60,7 @@ if ($SelfSignedCert) {
 
       if ($PSVersionTable.OS -notmatch "Darwin 19") {
          Write-Verbose "Trusting users to write to certificate root store"
+         # You can read more here: https://github.com/actions/virtual-environments/issues/4519#issuecomment-970202641
          sudo security authorizationdb write com.apple.trust-settings.admin allow | Write-Verbose
       }
       
