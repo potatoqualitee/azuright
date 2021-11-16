@@ -99,4 +99,4 @@ The scripts and documentation in this project are released under the [MIT Licens
 ## Notes
 In macOS Big Sur and above, this action runs `sudo security authorizationdb write com.apple.trust-settings.admin allow` which allows all users to write to the certificate root store. This  is done in order to bypass a new requirement for interactive approval to add certificates to the root store, which is great when you are sitting at your computer, but not when you're running commands non-interactively (like within a GitHub Runner).
 
-Also, if you're curiou about what's installed on GitHub runners, check out their [docs page](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-software).
+Also, if you're curious about what's installed on GitHub runners, check out their [docs page](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-software).
