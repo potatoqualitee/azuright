@@ -66,7 +66,7 @@ runs:
         }
 
         $connstring = ${{ github.action_path }}/main.ps1 @params
-        Write-Output "::set-output name=connstring::$connstring"
+        Add-Content -Path $env:GITHUB_OUTPUT -Value "connstring=$connstring"
 outputs:
   connstring:
     description: "Connection string"
